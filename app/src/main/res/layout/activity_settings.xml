@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity"
+    android:padding="20dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/set_profile_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30sp"
+        android:src="@drawable/image1"
+        app:civ_border_width="5dp"
+       />
+
+    <EditText
+        android:id="@+id/set_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/set_profile_image"
+        android:inputType="textMultiLine"
+        android:hint="Username"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"/>
+
+    <EditText
+    android:id="@+id/set_profile_status"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/set_user_name"
+    android:inputType="textMultiLine"
+    android:hint="Hey , I Am Using ChatAppX"
+    android:layout_marginTop="10dp"
+    android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/update_settings_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/set_profile_status"
+        android:text="Update"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"/>
+
+</RelativeLayout>

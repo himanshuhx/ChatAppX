@@ -98,11 +98,12 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser == null){
             SendUserToLoginActivity();
         }else{
-            VerifyUserExistence();
+            //VerifyUserExistence();
+            Toast.makeText(MainActivity.this,"No Username",Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void VerifyUserExistence() {
+  /*  private void VerifyUserExistence() {
         String currentUserId = fAuth.getCurrentUser().getUid();
 
         rootRef.child("users").child(currentUserId).addValueEventListener(new ValueEventListener() {
@@ -120,5 +121,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 }
