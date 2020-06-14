@@ -59,7 +59,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
+                final String password = mPassword.getText().toString().trim();
                 final String fullName = mFullName.getText().toString();
                 final String phone = mPhone.getText().toString();
 
@@ -108,6 +108,7 @@ public class SignUp extends AppCompatActivity {
                             user.put("fName",fullName);
                             user.put("email",email);
                             user.put("phone",phone);
+                            user.put("password",password);
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

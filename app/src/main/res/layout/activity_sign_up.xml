@@ -11,7 +11,7 @@
         android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="250dp"
         android:hint="Full Name"
         android:inputType="text"/>
 

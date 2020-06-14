@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class loginActivity extends AppCompatActivity {
@@ -23,7 +24,9 @@ public class loginActivity extends AppCompatActivity {
     private EditText mEmail;
     private EditText mPassword;
     private Button signin;
-    FirebaseAuth fAuth;
+
+    private FirebaseAuth fAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class loginActivity extends AppCompatActivity {
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
         signin = (Button) findViewById(R.id.SignIn);
+
+        fAuth = FirebaseAuth.getInstance();
+        currentUser = fAuth.getCurrentUser();
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,11 +63,12 @@ public class loginActivity extends AppCompatActivity {
                     return;
                 }
 
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fAuth.signInWithEmailAndPassword(email,password)
+                          .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(loginActivity.this,"Logged In Successfully",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(loginActivity.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         }else{
                             Toast.makeText(loginActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -77,5 +84,20 @@ public class loginActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),SignUp.class));
             }
         });
+    }
+
+        @Override
+        protected void onStart()
+    {
+            super.onStart();
+
+            if (currentUser != null) {
+                SendUserToMainActivity();
+            }
+        }
+
+    private void SendUserToMainActivity() {
+        Intent intent = new Intent(loginActivity.this,MainActivity.class);
+        startActivity(intent);
     }
 }
