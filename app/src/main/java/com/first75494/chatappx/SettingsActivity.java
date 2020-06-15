@@ -1,22 +1,17 @@
 package com.first75494.chatappx;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
     private String currentUserId;
     private FirebaseFirestore fStore;
     private FirebaseAuth fAuth;
+
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +45,12 @@ public class SettingsActivity extends AppCompatActivity {
                 UpdateSettings();
             }
         });
+
+        mToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Find Friends");
     }
 
     private void InitializeFields() {
@@ -75,7 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(SettingsActivity.this,"Updated",Toast.LENGTH_SHORT).show();
-                SendUserToMainActivity();
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -83,12 +86,5 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(SettingsActivity.this,"Error occured",Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void SendUserToMainActivity() {
-        Intent intent = new Intent(SettingsActivity.this,MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
     }
 }
