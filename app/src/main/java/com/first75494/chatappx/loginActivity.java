@@ -26,7 +26,6 @@ public class loginActivity extends AppCompatActivity {
     private Button signin;
 
     private FirebaseAuth fAuth;
-    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class loginActivity extends AppCompatActivity {
         signin = (Button) findViewById(R.id.SignIn);
 
         fAuth = FirebaseAuth.getInstance();
-        currentUser = fAuth.getCurrentUser();
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,20 +82,5 @@ public class loginActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),SignUp.class));
             }
         });
-    }
-
-        @Override
-        protected void onStart()
-    {
-            super.onStart();
-
-            if (currentUser != null) {
-                SendUserToMainActivity();
-            }
-        }
-
-    private void SendUserToMainActivity() {
-        Intent intent = new Intent(loginActivity.this,MainActivity.class);
-        startActivity(intent);
     }
 }
