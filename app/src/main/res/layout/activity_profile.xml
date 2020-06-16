@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity"
+    android:padding="20dp"
+    android:background="#4CAF50">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/visit_profile_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="164dp"
+        android:src="@drawable/image1" />
+
+    <TextView
+        android:id="@+id/visit_profile_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/visit_profile_image"
+        android:text="Username"
+        android:textColor="#030400"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/visit_profile_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/visit_profile_name"
+        android:text="Email"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+    <Button
+        android:id="@+id/send_message_request_button"
+        android:layout_width="230dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/visit_profile_email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="#673AB7"
+        android:text="Send Message"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16dp"/>
+
+</RelativeLayout>

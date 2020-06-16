@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -22,6 +26,8 @@ public class FindFriends extends AppCompatActivity {
     private Toolbar mToolbar;
     private RecyclerView FindFriendsRecyclerList;
     private FirebaseFirestore firebaseFirestore;
+    String documentId;
+    int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,22 @@ public class FindFriends extends AppCompatActivity {
                 new FirestoreRecyclerAdapter<Contacts, FindFriendViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull FindFriendViewHolder holder, int position, @NonNull Contacts model) {
-                          holder.userName.setText(model.getName());
+
+                        documentId = getSnapshots().getSnapshot(position).getId();
+                        holder.userName.setText(model.getName());
                           holder.userStatus.setText(model.getEmail());
                           //for image left part
+
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Intent  intent = new Intent(FindFriends.this,ProfileActivity.class);
+                                intent.putExtra("visit_user_id",documentId);
+                                startActivity(intent);
+                            }
+                        });
                     }
 
                     @NonNull
