@@ -27,7 +27,7 @@ public class FindFriends extends AppCompatActivity {
     private RecyclerView FindFriendsRecyclerList;
     private FirebaseFirestore firebaseFirestore;
     String documentId;
-    int i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +62,16 @@ public class FindFriends extends AppCompatActivity {
         FirestoreRecyclerAdapter<Contacts,FindFriendViewHolder > adapter =
                 new FirestoreRecyclerAdapter<Contacts, FindFriendViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull FindFriendViewHolder holder, int position, @NonNull Contacts model) {
+                    protected void onBindViewHolder(@NonNull FindFriendViewHolder holder, final int position, @NonNull Contacts model) {
 
-                        documentId = getSnapshots().getSnapshot(position).getId();
                         holder.userName.setText(model.getName());
                           holder.userStatus.setText(model.getEmail());
                           //for image left part
 
-
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                documentId = getSnapshots().getSnapshot(position).getId();
                                 Intent  intent = new Intent(FindFriends.this,ProfileActivity.class);
                                 intent.putExtra("visit_user_id",documentId);
                                 startActivity(intent);
