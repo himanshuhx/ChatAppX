@@ -102,29 +102,29 @@ public class ProfileActivity extends AppCompatActivity {
         Map<String,Object> sender = new HashMap<>();
         sender.put("request_type","sent");
 
-        fStore.collection("ChatRequests")
-                .add(sender)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        fStore.collection("ChatRequests").document(senderUserId)
+                .set(sender)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                               if(task.isSuccessful()){
-                                   Map<String,Object> receiver = new HashMap<>();
-                                   receiver.put("request_type","received");
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Map<String,Object> receiver = new HashMap<>();
+                            receiver.put("request_type","received");
 
-                                   fStore.collection("ChatRequests")
-                                           .add(receiver)
-                                           .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                               @Override
-                                               public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                   if(task.isSuccessful()){
-                                                       sendMessageRequestButton.setEnabled(true);
-                                                       current_state = "request_sent";
-                                                       sendMessageRequestButton.setText("Cancel Chat Request");
-                                                   }
-                                               }
-                                           });
-                               }
-                    }
+                            fStore.collection("ChatRequests").document(receiverUserId)
+                                    .set(receiver)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                sendMessageRequestButton.setEnabled(true);
+                                                current_state = "request_sent";
+                                                sendMessageRequestButton.setText("Cancel Chat Request");
+                                            }
+                                        }
+                                    });
+
+                    }}
                 });
 
     }
