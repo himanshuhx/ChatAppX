@@ -74,7 +74,7 @@ public class SignUp extends AppCompatActivity {
                 }
 
                 if(password.length() < 6){
-                    mPassword.setError("Password Must be >= 6 Characters");
+                    mPassword.setError("Password Must be > 6 Characters");
                     return;
                 }
 
@@ -104,12 +104,16 @@ public class SignUp extends AppCompatActivity {
                             Toast.makeText(SignUp.this, "User Created.", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
+
                             Map<String,Object> user = new HashMap<>();
                             user.put("name",fullName); //fName
                             user.put("email",email);
                             user.put("phone",phone);
                             user.put("password",password);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+
+                            documentReference.set(user)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
