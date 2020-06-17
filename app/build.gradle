@@ -43,4 +43,5 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.airbnb.android:lottie:3.4.0'
 }

@@ -11,39 +11,63 @@
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_below="@+id/logo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
         android:hint="Enter Email"
-        android:padding="10dp"
-        android:inputType="textEmailAddress"/>
+        android:textAlignment="center"
+        android:inputType="textEmailAddress"
+        android:padding="10dp" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/email"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
-        android:inputType="textPassword"
+        android:layout_marginEnd="20dp"
         android:hint="Enter Password"
-        android:padding="10dp"
-        android:layout_below="@+id/email"/>
+        android:textAlignment="center"
+        android:inputType="textPassword"
+        android:padding="10dp" />
 
     <Button
         android:id="@+id/SignIn"
-        android:layout_width="match_parent"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="40dp"
         android:text="Sign In"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:soundEffectsEnabled="true"
+        android:background="#FF5722"/>
 
     <Button
         android:id="@+id/SignUp"
-        android:layout_width="200dp"
+        android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/SignIn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:text="New User? Sign Up"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        android:background="#FF5722"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/logo"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
+        android:layout_marginTop="20dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+       android:layout_centerHorizontal="true"
+        app:lottie_rawRes="@raw/signinf"/>
 
 </RelativeLayout>
