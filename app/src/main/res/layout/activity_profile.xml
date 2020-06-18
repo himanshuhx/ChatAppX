@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity"
     android:padding="20dp"
-    android:background="#4CAF50">
+    android:background="#F67147">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/visit_profile_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="180sp"
+        android:layout_height="180sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="120dp"
         android:src="@drawable/image1" />
 
     <TextView
@@ -38,7 +38,7 @@
         android:text="Email"
         android:textColor="#000000"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:textAllCaps="false"
         android:textStyle="bold"
         android:textSize="20dp"/>
@@ -62,7 +62,7 @@
         android:layout_height="50dp"
         android:layout_below="@+id/send_message_request_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:background="#673AB7"
         android:text="Cancel Chat Request"
         android:textAllCaps="false"

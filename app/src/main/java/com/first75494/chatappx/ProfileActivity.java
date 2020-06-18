@@ -103,7 +103,20 @@ public class ProfileActivity extends AppCompatActivity {
                         if(info.equals("sent") ){
                             current_state = "request_sent";
                             sendMessageRequestButton.setText("Cancel Chat Request");
-                        }}
+                        }else if(info.equals("received")){
+                              current_state = "request_received";
+                              sendMessageRequestButton.setText("Accept Chat Request");
+                              declineMessageRequestButton.setVisibility(View.VISIBLE);
+                              declineMessageRequestButton.setEnabled(true);
+
+                              declineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+                                  @Override
+                                  public void onClick(View v) {
+                                      CancelChatRequest();
+                                  }
+                              });
+                          }
+                        }
                     }
                 } else {
                     Toast.makeText(ProfileActivity.this,"Error !!",Toast.LENGTH_SHORT).show();
@@ -140,6 +153,9 @@ public class ProfileActivity extends AppCompatActivity {
                       sendMessageRequestButton.setEnabled(true);
                       current_state="new";
                       sendMessageRequestButton.setText("Send Message");
+
+                      declineMessageRequestButton.setVisibility(View.INVISIBLE);
+                      declineMessageRequestButton.setEnabled(false);
                   }
             }
         });
