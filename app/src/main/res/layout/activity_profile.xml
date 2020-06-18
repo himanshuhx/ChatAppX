@@ -44,16 +44,30 @@
         android:textSize="20dp"/>
 
     <Button
-        android:id="@+id/send_message_request_button"
+    android:id="@+id/send_message_request_button"
+    android:layout_width="230dp"
+    android:layout_height="50dp"
+    android:layout_below="@+id/visit_profile_email"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="20dp"
+    android:background="#673AB7"
+    android:text="Send Message"
+    android:textAllCaps="false"
+    android:textColor="@color/colorPrimary"
+    android:textSize="16dp"/>
+
+    <Button
+        android:id="@+id/decline_message_request_button"
         android:layout_width="230dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/visit_profile_email"
+        android:layout_below="@+id/send_message_request_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="#673AB7"
-        android:text="Send Message"
+        android:text="Cancel Chat Request"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
-        android:textSize="16dp"/>
+        android:textSize="16dp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
