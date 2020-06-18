@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
@@ -28,6 +29,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
+
+    private static final String TAG ="PROFILE" ;
     private  String receiverUserId,senderUserId,current_state,fSenderId;
 
     private TextView userProfileName, userProfileEmail;
@@ -48,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         receiverUserId = getIntent().getExtras().get("visit_user_id").toString();
         senderUserId = fAuth.getCurrentUser().getUid();
-        fSenderId = senderUserId.toString();
+
         documentReference = fStore.collection("users").document(receiverUserId);
 
         Toast.makeText(this,"User ID: "+receiverUserId,Toast.LENGTH_SHORT).show();
@@ -97,66 +100,135 @@ public class ProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        String info = document.getString(receiverUserId);//getString("receiverUserId");
+                        String info = document.getString(receiverUserId);
 
                         if( info != null){
-                        if(info.equals("sent") ){
-                            current_state = "request_sent";
-                            sendMessageRequestButton.setText("Cancel Chat Request");
-                        }else if(info.equals("received")){
-                              current_state = "request_received";
-                              sendMessageRequestButton.setText("Accept Chat Request");
-                              declineMessageRequestButton.setVisibility(View.VISIBLE);
-                              declineMessageRequestButton.setEnabled(true);
+                            if(info.equals("sent") ){
+                                current_state = "request_sent";
+                                sendMessageRequestButton.setText("Cancel Chat Request");
+                            }else if(info.equals("received")){
+                                current_state = "request_received";
+                                sendMessageRequestButton.setText("Accept Chat Request");
+                                declineMessageRequestButton.setVisibility(View.VISIBLE);
+                                declineMessageRequestButton.setEnabled(true);
 
-                              declineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
-                                  @Override
-                                  public void onClick(View v) {
-                                      CancelChatRequest();
-                                  }
-                              });
-                          }
+                                declineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        CancelChatRequest();
+                                    }
+                                });
+                            }
                         }
                     }
                 } else {
-                    Toast.makeText(ProfileActivity.this,"Error !!",Toast.LENGTH_SHORT).show();
+                    fStore.collection("ChatRequests").document(senderUserId)
+                            .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                                    @Nullable FirebaseFirestoreException e) {
+                                    if (e != null) {
+                                        Log.w(TAG, "Listen failed.", e);
+                                        return;
+                                    }
+
+                                    if (snapshot != null && snapshot.exists()) {
+                                        if(snapshot.getData().toString().equals(receiverUserId)){
+                                            current_state = "friends";
+                                            sendMessageRequestButton.setText("Remove Contact");}
+                                    } else {
+                                        Log.d(TAG, "Current data: null");
+                                    }
+                                }
+                            });
+
                 }
             }
         });
 
-     if(!senderUserId.equals(receiverUserId)){
-         sendMessageRequestButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 sendMessageRequestButton.setEnabled(false);
+        if(!senderUserId.equals(receiverUserId)){
+            sendMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendMessageRequestButton.setEnabled(false);
 
-                 if(current_state.equals("new")){
-                     sendChatRequest();
-                 }
-                 if(current_state.equals("request_sent")){
-                     CancelChatRequest();
-                 }
-             }
-         });
-     }else{
-         sendMessageRequestButton.setVisibility(View.INVISIBLE);
-     }
+                    if(current_state.equals("new")){
+                        sendChatRequest();
+                    }
+                    if(current_state.equals("request_sent")){
+                        CancelChatRequest();
+                    }
+                    if(current_state.equals("request_received")){
+                        AcceptChatRequest();
+                    }
+                }
+            });
+        }else{
+            sendMessageRequestButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void AcceptChatRequest() {
+
+        Map<String,Object> sender = new HashMap<>();
+        sender.put(receiverUserId,"saved");
+
+        fStore.collection("Contacts").document(senderUserId)
+                .set(sender,SetOptions.merge())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Map<String,Object> receiver = new HashMap<>();
+                            receiver.put(senderUserId,"saved");
+
+                            fStore.collection("Contacts").document(receiverUserId)
+                                    .set(receiver,SetOptions.merge())
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            sendMessageRequestButton.setEnabled(true);
+                                            current_state = "friends";
+                                            sendMessageRequestButton.setText("Remove Contact");
+
+                                            declineMessageRequestButton.setVisibility(View.INVISIBLE);
+                                            declineMessageRequestButton.setEnabled(false);
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void CancelChatRequest() {
-        DocumentReference docRef = fStore.collection("ChatRequests").document(senderUserId);
+        Map<String,Object> sender = new HashMap<>();
+        sender.put(receiverUserId, FieldValue.delete());
 
-        docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+        fStore.collection("ChatRequests").document(senderUserId)
+                .update(sender).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                  if(task.isSuccessful()){
-                      sendMessageRequestButton.setEnabled(true);
-                      current_state="new";
-                      sendMessageRequestButton.setText("Send Message");
+                if(task.isSuccessful()){
+                    Map<String,Object> receiver = new HashMap<>();
+                    receiver.put(senderUserId, FieldValue.delete());
 
-                      declineMessageRequestButton.setVisibility(View.INVISIBLE);
-                      declineMessageRequestButton.setEnabled(false);
-                  }
+                    fStore.collection("ChatRequests").document(receiverUserId)
+                            .update(receiver)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+
+                                        sendMessageRequestButton.setEnabled(true);
+                                        current_state="new";
+                                        sendMessageRequestButton.setText("Send Message");
+
+                                        declineMessageRequestButton.setVisibility(View.INVISIBLE);
+                                        declineMessageRequestButton.setEnabled(false);
+                                    }
+                                }
+                            });
+                }
             }
         });
 
@@ -165,7 +237,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void sendChatRequest() {
 
         Map<String,Object> sender = new HashMap<>();
-        sender.put(receiverUserId.toString(),"sent");
+        sender.put(receiverUserId,"sent");
 
         fStore.collection("ChatRequests").document(senderUserId)
                 .set(sender, SetOptions.merge())
@@ -174,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Map<String,Object> receiver = new HashMap<>();
-                            receiver.put(senderUserId.toString(),"received");
+                            receiver.put(senderUserId,"received");
 
                             fStore.collection("ChatRequests").document(receiverUserId)
                                     .set(receiver,SetOptions.merge())
