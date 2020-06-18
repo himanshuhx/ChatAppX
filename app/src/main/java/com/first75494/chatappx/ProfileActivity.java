@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void ManageChatRequests() {
 
-        DocumentReference docRef = fStore.collection("ChatRequests").document(receiverUserId);
+        DocumentReference docRef = fStore.collection("ChatRequests").document(senderUserId);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -96,13 +97,13 @@ public class ProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        String request_type = document.getString("request_type").toString();
-                        String id = document.getString("sender_id").toString();
+                        String info = document.getString(receiverUserId);//getString("receiverUserId");
 
-                        if(request_type.equals("received") && id.equals(fSenderId)){
+                        if( info != null){
+                        if(info.equals("sent") ){
                             current_state = "request_sent";
                             sendMessageRequestButton.setText("Cancel Chat Request");
-                        }
+                        }}
                     }
                 } else {
                     Toast.makeText(ProfileActivity.this,"Error !!",Toast.LENGTH_SHORT).show();
@@ -130,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void CancelChatRequest() {
-        DocumentReference docRef = fStore.collection("ChatRequests").document(receiverUserId);
+        DocumentReference docRef = fStore.collection("ChatRequests").document(senderUserId);
 
         docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -148,21 +149,19 @@ public class ProfileActivity extends AppCompatActivity {
     private void sendChatRequest() {
 
         Map<String,Object> sender = new HashMap<>();
-        sender.put("receiver_id",receiverUserId);
-        sender.put("request_type","sent");
+        sender.put(receiverUserId.toString(),"sent");
 
         fStore.collection("ChatRequests").document(senderUserId)
-                .set(sender)
+                .set(sender, SetOptions.merge())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Map<String,Object> receiver = new HashMap<>();
-                            receiver.put("sender_id",senderUserId);
-                            receiver.put("request_type","received");
+                            receiver.put(senderUserId.toString(),"received");
 
                             fStore.collection("ChatRequests").document(receiverUserId)
-                                    .set(receiver)
+                                    .set(receiver,SetOptions.merge())
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
