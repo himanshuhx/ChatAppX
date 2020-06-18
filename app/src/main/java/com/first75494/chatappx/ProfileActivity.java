@@ -30,7 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
     private  String receiverUserId,senderUserId,current_state,fSenderId;
 
     private TextView userProfileName, userProfileEmail;
-    private Button  sendMessageRequestButton;
+    private Button  sendMessageRequestButton, declineMessageRequestButton;
     private CircleImageView userProfileImage;
 
     FirebaseAuth fAuth;
@@ -55,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         userProfileImage =  findViewById(R.id.visit_profile_image);
         userProfileName = findViewById(R.id.visit_profile_name);
         sendMessageRequestButton = findViewById(R.id.send_message_request_button);
+        declineMessageRequestButton = findViewById(R.id.decline_message_request_button);
         userProfileEmail = findViewById(R.id.visit_profile_email);
         current_state = "new";
 
@@ -86,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void ManageChatRequests() {
 
-        DocumentReference docRef = fStore.collection("ChatRequests").document(senderUserId);
+        DocumentReference docRef = fStore.collection("ChatRequests").document(receiverUserId);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -101,9 +102,11 @@ public class ProfileActivity extends AppCompatActivity {
                         if(request_type.equals("received") && id.equals(fSenderId)){
                             current_state = "request_sent";
                             sendMessageRequestButton.setText("Cancel Chat Request");
+                        }else if(){
+
                         }
                     } else {
-                       Toast.makeText(ProfileActivity.this,"Error !!",Toast.LENGTH_SHORT).show();
+
                     }
                 } else {
                     Toast.makeText(ProfileActivity.this,"Error !!",Toast.LENGTH_SHORT).show();
@@ -120,11 +123,30 @@ public class ProfileActivity extends AppCompatActivity {
                  if(current_state.equals("new")){
                      sendChatRequest();
                  }
+                 if(current_state.equals("request_sent")){
+                     CancelChatRequest();
+                 }
              }
          });
      }else{
          sendMessageRequestButton.setVisibility(View.INVISIBLE);
      }
+    }
+
+    private void CancelChatRequest() {
+        DocumentReference docRef = fStore.collection("ChatRequests").document(receiverUserId);
+
+        docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                  if(task.isSuccessful()){
+                      sendMessageRequestButton.setEnabled(true);
+                      current_state="new";
+                      sendMessageRequestButton.setText("Send Message");
+                  }
+            }
+        });
+
     }
 
     private void sendChatRequest() {
@@ -155,8 +177,7 @@ public class ProfileActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-
-                    }}
+                        }}
                 });
 
     }
