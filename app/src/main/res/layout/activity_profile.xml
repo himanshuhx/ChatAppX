@@ -67,6 +67,7 @@
         android:text="Cancel Chat Request"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
-        android:textSize="16dp"/>
+        android:textSize="16dp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

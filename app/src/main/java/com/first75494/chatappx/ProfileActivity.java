@@ -102,11 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
                         if(request_type.equals("received") && id.equals(fSenderId)){
                             current_state = "request_sent";
                             sendMessageRequestButton.setText("Cancel Chat Request");
-                        }else if(){
-
                         }
-                    } else {
-
                     }
                 } else {
                     Toast.makeText(ProfileActivity.this,"Error !!",Toast.LENGTH_SHORT).show();
