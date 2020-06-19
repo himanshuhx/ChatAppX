@@ -4,6 +4,6 @@
     android:id="@+id/app_bar_layout_new"
     android:layout_width="match_parent"
     android:layout_height="?actionBarSize"
-    android:background="#FF5722">
+    android:background="#3F51B5">
 
 </androidx.appcompat.widget.Toolbar>
