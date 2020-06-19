@@ -224,12 +224,39 @@ public class ProfileActivity extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            sendMessageRequestButton.setEnabled(true);
-                                            current_state = "friends";
-                                            sendMessageRequestButton.setText("Remove Contact");
+                                            if(task.isSuccessful()){
+                                                Map<String,Object> sender = new HashMap<>();
+                                                sender.put(receiverUserId, FieldValue.delete());
 
-                                            declineMessageRequestButton.setVisibility(View.INVISIBLE);
-                                            declineMessageRequestButton.setEnabled(false);
+                                                fStore.collection("ChatRequests").document(senderUserId)
+                                                        .update(sender)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    Map<String,Object> receiver = new HashMap<>();
+                                                                    receiver.put(senderUserId, FieldValue.delete());
+
+                                                                    fStore.collection("ChatRequests").document(receiverUserId)
+                                                                            .update(receiver)
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                   if(task.isSuccessful()){
+                                                                                       sendMessageRequestButton.setEnabled(true);
+                                                                                       current_state = "friends";
+                                                                                       sendMessageRequestButton.setText("Remove Contact");
+
+                                                                                       declineMessageRequestButton.setVisibility(View.INVISIBLE);
+                                                                                       declineMessageRequestButton.setEnabled(false);
+                                                                                   }
+                                                                                }
+                                                                            });
+                                                                }
+                                                            }
+                                                        });
+                                            }
+
                                         }
                                     });
                         }
