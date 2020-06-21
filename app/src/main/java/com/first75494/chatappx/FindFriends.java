@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,10 +34,10 @@ public class FindFriends extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
 
-        FindFriendsRecyclerList = (RecyclerView) findViewById(R.id.find_friends_Recycler_list);
+        FindFriendsRecyclerList = findViewById(R.id.find_friends_Recycler_list);
         FindFriendsRecyclerList.setLayoutManager(new LinearLayoutManager(this));
 
-        mToolbar = (Toolbar) findViewById(R.id.find_friends_toolbar);
+        mToolbar = findViewById(R.id.find_friends_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -64,7 +61,7 @@ public class FindFriends extends AppCompatActivity {
                     @Override
                     protected void onBindViewHolder(@NonNull FindFriendViewHolder holder, final int position, @NonNull Contacts model) {
 
-                        holder.userName.setText(model.getName());
+                          holder.userName.setText(model.getName());
                           holder.userStatus.setText(model.getEmail());
                           //for image left part
 

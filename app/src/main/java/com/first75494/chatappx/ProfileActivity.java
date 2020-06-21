@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -161,11 +160,48 @@ public class ProfileActivity extends AppCompatActivity {
                     if(current_state.equals("request_received")){
                         AcceptChatRequest();
                     }
+                    if(current_state.equals("friends")){
+                        RemoveSpecificContact();
+                    }
                 }
             });
         }else{
             sendMessageRequestButton.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void RemoveSpecificContact() {
+        Map<String,Object> sender = new HashMap<>();
+        sender.put(receiverUserId, FieldValue.delete());
+
+        fStore.collection("Contacts").document(senderUserId)
+                .update(sender)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Map<String,Object> receiver = new HashMap<>();
+                    receiver.put(senderUserId, FieldValue.delete());
+
+                    fStore.collection("Contacts").document(receiverUserId)
+                            .update(receiver)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+
+                                        sendMessageRequestButton.setEnabled(true);
+                                        current_state="new";
+                                        sendMessageRequestButton.setText("Send Message");
+
+                                        declineMessageRequestButton.setVisibility(View.INVISIBLE);
+                                        declineMessageRequestButton.setEnabled(false);
+                                    }
+                                }
+                            });
+                }
+            }
+        });
     }
 
     private void AcceptChatRequest() {
@@ -187,12 +223,39 @@ public class ProfileActivity extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            sendMessageRequestButton.setEnabled(true);
-                                            current_state = "friends";
-                                            sendMessageRequestButton.setText("Remove Contact");
+                                            if(task.isSuccessful()){
+                                                Map<String,Object> sender = new HashMap<>();
+                                                sender.put(receiverUserId, FieldValue.delete());
 
-                                            declineMessageRequestButton.setVisibility(View.INVISIBLE);
-                                            declineMessageRequestButton.setEnabled(false);
+                                                fStore.collection("ChatRequests").document(senderUserId)
+                                                        .update(sender)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    Map<String,Object> receiver = new HashMap<>();
+                                                                    receiver.put(senderUserId, FieldValue.delete());
+
+                                                                    fStore.collection("ChatRequests").document(receiverUserId)
+                                                                            .update(receiver)
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                   if(task.isSuccessful()){
+                                                                                       sendMessageRequestButton.setEnabled(true);
+                                                                                       current_state = "friends";
+                                                                                       sendMessageRequestButton.setText("Remove Contact");
+
+                                                                                       declineMessageRequestButton.setVisibility(View.INVISIBLE);
+                                                                                       declineMessageRequestButton.setEnabled(false);
+                                                                                   }
+                                                                                }
+                                                                            });
+                                                                }
+                                                            }
+                                                        });
+                                            }
+
                                         }
                                     });
                         }
@@ -205,7 +268,8 @@ public class ProfileActivity extends AppCompatActivity {
         sender.put(receiverUserId, FieldValue.delete());
 
         fStore.collection("ChatRequests").document(senderUserId)
-                .update(sender).addOnCompleteListener(new OnCompleteListener<Void>() {
+                .update(sender)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){

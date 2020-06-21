@@ -15,19 +15,17 @@
         android:id="@+id/mytoolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/holo_green_dark"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@color/skyblue"/>
+        android:background="#283BA5"
+        app:layout_scrollFlags="scroll|enterAlways"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabIndicatorHeight="2dp"
+        app:tabIndicatorColor="#FF5722"
+        app:tabIndicatorHeight="3dp"
         app:tabMode="fixed"
-        app:tabGravity="fill"
-        />
+        app:tabGravity="fill"/>
 
 </com.google.android.material.appbar.AppBarLayout>
 

@@ -15,6 +15,6 @@
         android:id="@+id/find_friends_Recycler-list"
         android:layout_width="match_parent"
         android:layout_below="@+id/find_friends_toolbar"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
