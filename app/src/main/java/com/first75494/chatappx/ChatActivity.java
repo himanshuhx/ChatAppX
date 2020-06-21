@@ -56,7 +56,7 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
 
-    private final List<Messages> messagesList = new ArrayList<>();
+    private List<Messages> messagesList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private MessagesAdapter messagesAdapter;
     private RecyclerView  userMessagesList;
@@ -110,9 +110,10 @@ public class ChatActivity extends AppCompatActivity {
         sendMessageBtn = findViewById(R.id.send_message_btn);
         messageInputText = findViewById(R.id.input_message);
 
-        messagesAdapter = new MessagesAdapter(messagesList); //here
+        messagesAdapter = new MessagesAdapter(messagesList);
         userMessagesList = findViewById(R.id.private_message_list);
-        linearLayoutManager = new LinearLayoutManager(this);
+        userMessagesList.setLayoutManager(new LinearLayoutManager(this));
+        //linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setAdapter(messagesAdapter);
     }
 
@@ -120,18 +121,21 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-            firestore.collection("messages").document(messageSenderId)
+        final String messageId =  firestore.collection("messages").document(messageSenderId)
+                .collection(messageReceiverId).document().getId();
+
+
+        firestore.collection("messages").document(messageSenderId)
+                .collection(messageReceiverId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                        List<Messages> messages = queryDocumentSnapshots.toObjects(Messages.class);
-                         messagesList.set(messages);
-                        messagesAdapter.s
-                       // messagesAdapter.notifyDataSetChanged();
+                            messagesList.add(queryDocumentSnapshots.getDocuments().get(0).toObject(Messages.class));
 
-                    }
-                });
+                                messagesAdapter.notifyDataSetChanged();
+
+                }});
 
     }
 

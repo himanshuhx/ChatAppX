@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.mytoolbar); //Finding toolbar id
         setSupportActionBar(toolbar); //Setting the ToolBar As The AppBar For The Activity
-        getSupportActionBar().setTitle("ChatAppX"); //Setting Up The Title Of Our Action Bar
+        getSupportActionBar().setTitle("Chat-App"); //Setting Up The Title Of Our Action Bar
 
         viewPager = (ViewPager) findViewById(R.id.myviewpager); //Finding viewpager id
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager()); //calling the android Fragment Manager
