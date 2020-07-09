@@ -20,6 +20,12 @@ A Social Networking Application built in Android Studio 3.6.3 with [Firebase Fir
 - User also has the choice to delete saved specific Contact from his/her Friends's List.
 - User can chat with users present in his/her Contact List.
 
+## Firestore screencasts
+
+<img src="https://user-images.githubusercontent.com/65825310/87065410-9e662580-c22e-11ea-9c0e-36a43805d95c.gif" width="950" height="400">
+
+<img src="https://user-images.githubusercontent.com/65825310/87068064-ac1daa00-c232-11ea-864a-c46878348859.gif" width="950" height="400">
+
 ## Screenshots :camera:
 <img src="https://user-images.githubusercontent.com/65825310/86353878-a00b7880-bc85-11ea-8926-d9af3b78fe20.png" width="250" height="450"> <img src="https://user-images.githubusercontent.com/65825310/86353921-b4e80c00-bc85-11ea-9593-e3a9f6c9cdfd.png" width="250" height="450">
 <img src="https://user-images.githubusercontent.com/65825310/86353978-d21cda80-bc85-11ea-8993-eff54a77c8be.png" width="250" height="450">
